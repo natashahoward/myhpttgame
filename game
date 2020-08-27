@@ -1,0 +1,362 @@
+import random
+import requests
+import sys
+
+# things I've added
+# replaced a bunch of if statements by using a dictionary
+# added a bunch of while loops - so if an unsuitable answer is given, it'll ask again
+# added so the computer plays and a 50:50 of whether that happens
+# added ability to replay
+# made the computer follow a couple of tactical rules
+# will always pick Gryffindor, will never pick Slytherin, will always pick birth year for 3 oldest characters
+
+
+# More things to add potentially!
+
+# high scores
+# perhaps add an option to go back, open the rules and resume the game
+# add option to quit at any time - and get it to ask if sure
+
+# split the deck in two sets at the beginning?
+# you win their card if they lose and it goes to the back of your deck
+# whoever has the most cards at the end of the rounds wins
+
+
+# handy lists
+affirmative = ['y',
+               'ye',
+               'yee',
+               'yes',
+               'yep',
+               'yea',
+               'yeah',
+               'yuh-huh',
+               ]
+negative = ['n',
+            'no',
+            'noo',
+            'na',
+            'nah',
+            'nope',
+            'nuh-uh',
+            ]
+affneg = affirmative + negative
+catas = ['birth year',
+         'house',
+         'ancestry',
+         'magic points'
+         ]
+num_word_list = [
+                'zero',
+                'one',
+                'two',
+                'three',
+                'four',
+                'five',
+                'six',
+                'seven',
+                'eight',
+                'nine',
+                'ten',
+                ]
+num_dic = {
+    'one': 1,
+    'two': 2,
+    'three': 3,
+    'four': 4,
+    'five': 5,
+    'six': 6,
+    'seven': 7,
+    'eight': 8,
+    'nine': 9,
+    'ten': 10,
+            }
+num_int_list = []
+for x in range(0, 51):
+    num_int_list.append(str(x))
+
+num_str_list = num_word_list + num_int_list
+
+
+def generate_rand_int(min, max):
+    random_int = random.randint(min, max)
+    return random_int
+
+
+def get_characters():
+    url = "http://hp-api.herokuapp.com/api/characters"
+    response = requests.get(url)
+    my_characters = response.json()
+    return my_characters
+
+
+def random_character_adj():
+    my_int = generate_rand_int(min=0, max=22)
+    characters = get_characters()
+
+    random_character_name = characters[my_int]['name']
+    random_character_house = characters[my_int]['house']
+    random_character_ancestry = characters[my_int]['ancestry']
+    random_character_birth_year = characters[my_int]['yearOfBirth']
+    random_character_mp = len(characters[my_int]['actor'])
+
+    # defining these generally first, then empty entries can be corrected
+    character_name = random_character_name
+    character_house = random_character_house
+    character_ancestry = random_character_ancestry
+    character_birth_year = random_character_birth_year
+    character_mp = random_character_mp
+
+    if my_int == 4 or my_int == 6 or my_int == 10:
+        character_ancestry = 'half-blood'
+        if my_int == 6:
+            character_birth_year = 1979
+    elif my_int == 5:
+        character_ancestry = 'pure-blood'
+    elif my_int == 17:
+        character_birth_year = 1882  # between 1882 and 1913
+    elif my_int == 18:
+        character_house = 'Ravenclaw'
+        character_birth_year = 1973  # or earlier
+    elif my_int == 19:
+        character_birth_year = 1946  # or earlier
+    elif my_int == 21:
+        character_birth_year = 1980
+    elif my_int == 22:
+        character_birth_year = 1979
+
+    random_character_dict = {
+        'name': character_name,
+        'house': character_house,
+        'ancestry': character_ancestry,
+        'birth year': character_birth_year,
+        'magic points': character_mp,
+    }
+    return random_character_dict
+
+
+def random_cata():
+    rc = generate_rand_int(min=0, max=3)
+    return rc
+
+
+def rules():
+    print("""
+    \nHello and welcome to our game of Harry Potter Top Trumps!\nThe game works as follows.
+You and the computer will both be given a card with four categories.
+These categories are birth year, house, ancestry and magic points.
+You get to look at your card and decide which category looks like your best chance of winning the round.
+So, for birth year, the oldest wins.\nFor house, Gryffindor defeats Hufflepuff defeats Ravenclaw defeats Slytherin.
+For ancestry, it works a bit like rock, paper, scissors.
+i.e. muggleborn defeats pure-blood defeats half-blood defeats muggleborn etc.
+And finally, for magic points, the card with the higher number defeats the other.\nAnd that's it!""")
+
+
+# def kw_check():
+    
+
+
+def run():
+    # sets the initial scores of the game to 0
+    user_score = 0
+    comp_score = 0
+
+    ready = input('\nAre you ready to play? y/n \n').lower()
+    if ready in affirmative:
+        number_reply = input('\nHow many rounds?\n').lower()
+
+        while number_reply not in num_str_list:
+            # if
+            number_reply = input(
+                "\nSorry, I didn't understand '" + number_reply + "'. Please try again.\nHow many rounds?\n").lower()
+            if number_reply in num_str_list:
+                break
+            else:
+                number_reply = input(
+                    "\nSorry, I didn't understand '" + number_reply + "'. Please try again.\nHow many rounds?\n").lower()
+                continue
+
+        if number_reply in num_word_list:
+            if number_reply in num_dic:
+                number_rounds = num_dic[number_reply]
+            elif number_reply == 'zero':
+                print('\nOkay then! Maybe next time.')
+                sys.exit()
+        elif number_reply in num_int_list:
+            if number_reply == '0':
+                print('\nOkay then! Maybe next time.')
+                sys.exit()
+            else:
+                number_rounds = int(number_reply)
+
+        elif number_reply == '0':
+            print('Maybe next time!')
+            sys.exit()
+
+        coin_toss = generate_rand_int(min=0, max=1)
+        print("\nSo our 50:50 decides whether you or the computer picks the stats!")
+        if coin_toss == 0:
+            print("You win the 50:50! You get to choose.")
+        elif coin_toss == 1:
+            print("The computer wins the 50:50. It gets to choose.")
+
+        # for loop to make the game last for Y rounds
+        for Y in range(0, number_rounds):
+
+            my_character = random_character_adj()
+            opponent_character = random_character_adj()
+
+            print('\nYou were given {}.'.format(my_character['name']))
+            print('These are their stats.')
+            print('Birth Year: {}\n'
+                  'House: {}\n'
+                  'Ancestry: {}\n'
+                  'Magic points: {}'.format(my_character['birth year'],
+                                            my_character['house'],
+                                            my_character['ancestry'],
+                                            my_character['magic points']))
+
+            if coin_toss == 0:
+                reply_choice = input("Which stat would you like to use? \n").lower()
+
+                while reply_choice not in catas:
+                    reply_choice = input(
+                        "\nSorry, I couldn't understand '" + reply_choice + "'. Please try again.\n"
+                        "Which stat would you like to use?\n").lower()
+                    if reply_choice in catas:
+                        break
+                    else:
+                        reply_choice = input(
+                            "\nSorry, I couldn't understand'" + reply_choice + "'. Please try again.\n"
+                            "Which stat would you like to use?\n").lower()
+                        continue
+
+            elif coin_toss == 1:
+                if opponent_character['house'] == 'Gryffindor':
+                    reply_choice = 'house'
+                elif opponent_character['house'] == 'Slytherin':
+                    catas.remove('house')
+                    if opponent_character['birth year'] < 1930:
+                        reply_choice = 'birth year'
+                        catas.append('house')
+                    else:
+                        reply_choice = catas[random_cata()]
+                        catas.append('house')
+                elif opponent_character['birth year'] < 1930:
+                    reply_choice = 'birth year'
+                else:
+                    reply_choice = catas[random_cata()]
+
+            if reply_choice == 'birth year' or 'house':
+                my_stat = my_character[reply_choice]
+                opponent_stat = opponent_character[reply_choice]
+
+                if my_stat < opponent_stat:
+                    print('\nYou win this round!')
+                    user_score = user_score + 1
+                elif my_stat > opponent_stat:
+                    print('\nYou lose this round!')
+                    comp_score = comp_score + 1
+                else:
+                    print("\nYou've drawn this round!")
+
+            elif reply_choice == 'ancestry':
+                my_stat = my_character['ancestry']
+                opponent_stat = opponent_character['ancestry']
+
+                if my_stat == opponent_stat:
+                    print("It's a draw!")
+
+                elif my_stat == 'half-blood' and opponent_stat == 'muggleborn':
+                    print('\nYou win this round!')
+                    user_score = user_score + 1
+
+                elif my_stat == 'half-blood' and opponent_stat == 'pure-blood':
+                    print('\nYou lose this round!')
+                    comp_score = comp_score + 1
+
+                elif my_stat == 'muggleborn' and opponent_stat == 'pure-blood':
+                    print('\nYou win this round!')
+                    user_score = user_score + 1
+
+                elif my_stat == 'muggleborn' and opponent_stat == 'half-blood':
+                    print('\nYou lose this round!')
+                    comp_score = comp_score + 1
+
+                elif my_stat == 'pure-blood' and opponent_stat == 'half-blood':
+                    print('\nYou win this round!')
+                    user_score = user_score + 1
+
+                elif my_stat == 'pure-blood' and opponent_stat == 'muggle-born':
+                    print('\nYou lose this round!')
+                    comp_score = comp_score + 1
+
+            elif reply_choice == 'magic points':
+                my_stat = my_character['magic points']
+                opponent_stat = opponent_character['magic points']
+
+                if my_stat > opponent_stat:
+                    print('\nYou win this round!')
+                    user_score = user_score + 1
+                elif my_stat < opponent_stat:
+                    print('\nYou lose this round!')
+                    comp_score = comp_score + 1
+                else:
+                    print("\nYou've drawn this round!")
+
+            print('The opponent selected {}, and their {} was {}.\n'.format(opponent_character['name'], reply_choice,
+                                                                            opponent_stat))
+
+        # when all the rounds have happened, we compare the scores between the user and the computer
+        else:
+            if user_score > comp_score:
+                print('You scored {} and your opponent scored {}, you win! '.format(user_score, comp_score))
+            elif user_score < comp_score:
+                print('You scored {} and your opponent scored {}, you lose! '.format(user_score, comp_score))
+            elif user_score == comp_score:
+                print('You scored {} and your opponent also scored {}, you draw! '.format(user_score, comp_score))
+
+        replay = input("\nWould you like to play again?\n").lower()
+
+        while replay not in affneg:
+            replay = input(
+                "\n1Sorry, I couldn't understand '" + replay + "'Would you like to play again?\n").lower()
+            if replay in affirmative or negative:
+                break
+            else:
+                replay = input(
+                    "\nSorry, I couldn't understand '" + replay + "'. Please try again.\n"
+                                                                  "Would you like to play again?\n").lower()
+                continue
+
+        if replay in affirmative:
+            print("\nGlad you're enjoying the game! Let's go again!")
+            run()
+        elif replay in negative:
+            print("\nGoodbye then, hope you enjoyed playing!")
+        else:
+            print("\nSorry, I didn't understand that.")
+            # add in loop to play again
+
+
+    elif ready in negative:
+        sure = input("\nAre you sure?\n").lower()
+        if sure in affirmative:
+            sure2 = input("\nLike... really really sure?\n").lower()
+            if sure2 in affirmative:
+                print('\nOkay, goodbye!')
+            elif sure2 in negative:
+                run()
+        elif sure in negative:
+            run()
+        else:
+            print("\nI don't understand '" + ready + "', so I'll ask again!")
+            run()
+
+    else:
+        print("\nSorry, I didn't understand '" + ready + "'. Please try again.")
+        run()
+
+
+rules()
+run()
