@@ -1,10 +1,10 @@
 # myhpttgame
 My Harry Potter Top Trumps Game
 
-My program is based on the game 'Top Trumps'. For those not familiar with the game, each card in the deck has a character,
-and all of the characters have a range of characteristics or catagories. For example, these catagories could be height or age.
-The cards are dealt evenly between players, and players cannot look beyond their top card. Without seeing the other player's cards,
-one player chooses a catagory in the hope that they score the best within that catagory. 
+My program is based on the game 'Top Trumps'. For those not familiar with the game, each card in the deck has a character, and all of the characters
+have a range of characteristics or catagories. For example, these catagories could be height or age. The cards are dealt evenly between players,
+and players cannot look beyond their top card. Without seeing the other player's cards, one player chooses a catagory in the hope that they score
+the best within that catagory. 
 
 The data for the 'cards' comes from a Harry Potter API.
 To make the game more user-friendly, when the user is asked to input yes or no, there are a range of answers it will accept
@@ -39,3 +39,6 @@ Features I have introduced since finishing the course
 - added ability to replay
 - made the computer follow a couple of tactical rules
 - eg. will always pick Gryffindor, will never pick Slytherin, will always pick birth year for 3 oldest characters
+- Most recently, I corrected an error where for some reason, the game would say you lost the round when you had more the magic points than the computer.
+  After searching through the code for any obvious errors and not finding any, the error corrected itself when I simply moved the position of this section
+  of code. I don't know why this problem arose nor that why what I did would have corrected the problem so I'd like to explore this a bit more!
