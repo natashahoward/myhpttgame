@@ -2,6 +2,7 @@ import random
 import requests
 import sys
 
+
 # things I've added
 # replaced a bunch of if statements by using a dictionary
 # added a bunch of while loops - so if an unsuitable answer is given, it'll ask again
@@ -47,18 +48,18 @@ catas = ['birth year',
          'magic points'
          ]
 num_word_list = [
-                'zero',
-                'one',
-                'two',
-                'three',
-                'four',
-                'five',
-                'six',
-                'seven',
-                'eight',
-                'nine',
-                'ten',
-                ]
+    'zero',
+    'one',
+    'two',
+    'three',
+    'four',
+    'five',
+    'six',
+    'seven',
+    'eight',
+    'nine',
+    'ten',
+]
 num_dic = {
     'one': 1,
     'two': 2,
@@ -70,7 +71,7 @@ num_dic = {
     'eight': 8,
     'nine': 9,
     'ten': 10,
-            }
+}
 num_int_list = []
 for x in range(0, 51):
     num_int_list.append(str(x))
@@ -140,6 +141,11 @@ def random_cata():
     return rc
 
 
+def random_cata2():
+    rc = generate_rand_int(min=0, max=2)
+    return rc
+
+
 def rules():
     print("""
     \nHello and welcome to our game of Harry Potter Top Trumps!\nThe game works as follows.
@@ -153,7 +159,6 @@ And finally, for magic points, the card with the higher number defeats the other
 
 
 # def kw_check():
-    
 
 
 def run():
@@ -222,13 +227,13 @@ def run():
                 while reply_choice not in catas:
                     reply_choice = input(
                         "\nSorry, I couldn't understand '" + reply_choice + "'. Please try again.\n"
-                        "Which stat would you like to use?\n").lower()
+                                                                            "Which stat would you like to use?\n").lower()
                     if reply_choice in catas:
                         break
                     else:
                         reply_choice = input(
                             "\nSorry, I couldn't understand'" + reply_choice + "'. Please try again.\n"
-                            "Which stat would you like to use?\n").lower()
+                                                                               "Which stat would you like to use?\n").lower()
                         continue
 
             elif coin_toss == 1:
@@ -240,14 +245,29 @@ def run():
                         reply_choice = 'birth year'
                         catas.append('house')
                     else:
-                        reply_choice = catas[random_cata()]
+                        reply_choice = catas[random_cata2()]
                         catas.append('house')
                 elif opponent_character['birth year'] < 1930:
                     reply_choice = 'birth year'
                 else:
                     reply_choice = catas[random_cata()]
 
-            if reply_choice == 'birth year' or 'house':
+            if reply_choice == 'magic points':
+                my_stat = my_character['magic points']
+                opponent_stat = opponent_character['magic points']
+
+                if my_stat > opponent_stat:
+                    print('\nYou win this round!')
+                    user_score = user_score + 1
+
+                elif my_stat < opponent_stat:
+                    print('\nYou lose this round!')
+                    comp_score = comp_score + 1
+
+                else:
+                    print("\nYou've drawn this round!")
+
+            elif reply_choice == 'birth year' or 'house':
                 my_stat = my_character[reply_choice]
                 opponent_stat = opponent_character[reply_choice]
 
@@ -291,19 +311,6 @@ def run():
                     print('\nYou lose this round!')
                     comp_score = comp_score + 1
 
-            elif reply_choice == 'magic points':
-                my_stat = my_character['magic points']
-                opponent_stat = opponent_character['magic points']
-
-                if my_stat > opponent_stat:
-                    print('\nYou win this round!')
-                    user_score = user_score + 1
-                elif my_stat < opponent_stat:
-                    print('\nYou lose this round!')
-                    comp_score = comp_score + 1
-                else:
-                    print("\nYou've drawn this round!")
-
             print('The opponent selected {}, and their {} was {}.\n'.format(opponent_character['name'], reply_choice,
                                                                             opponent_stat))
 
@@ -338,7 +345,6 @@ def run():
             print("\nSorry, I didn't understand that.")
             # add in loop to play again
 
-
     elif ready in negative:
         sure = input("\nAre you sure?\n").lower()
         if sure in affirmative:
@@ -359,4 +365,5 @@ def run():
 
 
 rules()
+run()
 run()
