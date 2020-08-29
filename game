@@ -2,7 +2,6 @@ import random
 import requests
 import sys
 
-
 # things I've added
 # replaced a bunch of if statements by using a dictionary
 # added a bunch of while loops - so if an unsuitable answer is given, it'll ask again
@@ -17,7 +16,6 @@ import sys
 # high scores
 # perhaps add an option to go back, open the rules and resume the game
 # add option to quit at any time - and get it to ask if sure
-
 # split the deck in two sets at the beginning?
 # you win their card if they lose and it goes to the back of your deck
 # whoever has the most cards at the end of the rounds wins
@@ -47,6 +45,9 @@ catas = ['birth year',
          'ancestry',
          'magic points'
          ]
+actions = ['rules',
+           'quit']
+valid_response = catas + actions
 num_word_list = [
     'zero',
     'one',
@@ -158,9 +159,6 @@ i.e. muggleborn defeats pure-blood defeats half-blood defeats muggleborn etc.
 And finally, for magic points, the card with the higher number defeats the other.\nAnd that's it!""")
 
 
-# def kw_check():
-
-
 def run():
     # sets the initial scores of the game to 0
     user_score = 0
@@ -224,11 +222,11 @@ def run():
             if coin_toss == 0:
                 reply_choice = input("Which stat would you like to use? \n").lower()
 
-                while reply_choice not in catas:
+                while reply_choice not in valid_response:
                     reply_choice = input(
                         "\nSorry, I couldn't understand '" + reply_choice + "'. Please try again.\n"
                                                                             "Which stat would you like to use?\n").lower()
-                    if reply_choice in catas:
+                    if reply_choice in valid_response:
                         break
                     else:
                         reply_choice = input(
@@ -252,7 +250,10 @@ def run():
                 else:
                     reply_choice = catas[random_cata()]
 
-            if reply_choice == 'magic points':
+            if reply_choice == 'quit':
+                exit()
+
+            elif reply_choice == 'magic points':
                 my_stat = my_character['magic points']
                 opponent_stat = opponent_character['magic points']
 
