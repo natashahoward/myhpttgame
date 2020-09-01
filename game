@@ -29,6 +29,19 @@ import sys
 # returning true is so the user isn't told it was an incorrect input
 # if not, return false and tell the user it was a bad input
 
+# something to fix
+# which stat?
+# quit
+# are you sure you want to quit?
+# no
+# which stat would you like to use?
+# rules
+# PROGRAM BREAKS
+
+# another thing to fix
+# are you ready to play?
+# gibberish answer
+# prints over and over and over
 
 def check(words):
     if words in actions:
@@ -95,9 +108,11 @@ for x in range(0, 51):
 num_str_list = num_word_list + num_int_list
 
 # define regularly used strings here
+welcome ="\nHello and welcome to our game of Harry Potter Top Trumps!\n"
 ruready = "\nAre you ready to play?\n"
 hmrounds = "\nHow many rounds would you like to play?\n"
-nocomprende = "Sorry, I don't understand"
+nocomprende = "Sorry, I didn't understand "
+pta = ". Please try again."
 # sorry I didn't understand, please try again
 whichstat = "\nWhich stat would you like to use?\n"
 suqi = "\nAre you sure you want to quit playing?\n"
@@ -233,7 +248,7 @@ def run():
                 break
             else:
                 number_reply = input(
-                    "\nSorry, I didn't understand '" + number_reply + "'. Please try again.\n" + hmrounds).lower()
+                    nocomprende + "'" + number_reply + "'" + pta + hmrounds).lower()
                 continue
 
         if number_reply in num_word_list:
@@ -250,7 +265,7 @@ def run():
                 number_rounds = int(number_reply)
 
         coin_toss = generate_rand_int(min=0, max=1)
-        print("\nSo our coin toss decides whether you or the computer picks the stats!")
+        print("\nOur coin toss decides whether you or the computer picks the stats!")
         if coin_toss == 0:
             print("You win the coin toss! You get to choose.")
         elif coin_toss == 1:
@@ -303,7 +318,7 @@ def run():
                                 if reply_choice in catas:
                                     break
                                 else:
-                                    continue #not sure if this is right
+                                    continue  # not sure if this is right
                             else:
                                 continue
                         elif reply_choice == 'rules':
@@ -312,8 +327,7 @@ def run():
                             break
 
                     else: reply_choice = input(
-                        "\nSorry, I couldn't understand '" + reply_choice + "'. Please try again.\n"
-                                                                            "Which stat would you like to use?\n").lower()
+                        nocomprende + "'" + reply_choice + "'" + pta + whichstat).lower()
                     continue
 
             if reply_choice == 'magic points':
@@ -407,8 +421,7 @@ def run():
                     break
             else:
                 replay = input(
-                    "\nSorry, I couldn't understand '" + replay + "'. Please try again.\n"
-                                                                        "Would you like to play again?\n").lower()
+                    nocomprende + "'" + replay + "'" + pta + wupl).lower()
                 continue
 
         if replay in affirmative:
@@ -419,8 +432,7 @@ def run():
 
         else:
             replay = input(
-                "\nSorry, I couldn't understand '" + replay + "'. Please try again.\n"
-                                                              "Would you like to play again?\n").lower()
+                nocomprende + "'" + replay + "'" + pta + wupl).lower()
                 # loop back
 
     elif ready in negative:
@@ -434,16 +446,17 @@ def run():
         elif sure in negative:
             run()
         else:
-            print("\nI don't understand '" + ready + "', so I'll ask again!")
+            print(nocomprende + "'" + ready + "'" + pta)
             run()
 
     else:
-        print("\nSorry, I didn't understand '" + ready + "'. Please try again.")
+        print(nocomprende + "'" + ready + "'" + pta)
         run()
 
 
-print('\nHello and welcome to our game of Harry Potter Top Trumps!\n')
+print(welcome)
 print('INSERT ART HERE')
 ready = input(ruready).lower()
 rules()
 run()
+
