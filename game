@@ -20,6 +20,13 @@ import sys
 # you win their card if they lose and it goes to the back of your deck
 # whoever has the most cards at the end of the rounds wins
 
+# for each loop, put the user input into a function
+# this function checks to see if it's a certain word
+# if it is, it'll do whatever needs to be done
+# then return true??
+# returning true is so the user isn't told it was an incorrect input
+# if not, return false and tell the user it was a bad input
+
 
 # handy lists
 affirmative = ['y',
@@ -169,7 +176,10 @@ def run():
         number_reply = input('\nHow many rounds?\n').lower()
 
         while number_reply not in num_str_list:
-            # if
+            # if number_reply in valid_response:
+            #     print('Test successful')
+            # so the above does print 'Test successful and then it follows with "sorry i didn't understand"
+            # return to this loop later because it's less important
             number_reply = input(
                 "\nSorry, I didn't understand '" + number_reply + "'. Please try again.\nHow many rounds?\n").lower()
             if number_reply in num_str_list:
@@ -192,16 +202,12 @@ def run():
             else:
                 number_rounds = int(number_reply)
 
-        elif number_reply == '0':
-            print('Maybe next time!')
-            sys.exit()
-
         coin_toss = generate_rand_int(min=0, max=1)
-        print("\nSo our 50:50 decides whether you or the computer picks the stats!")
+        print("\nSo our coin toss decides whether you or the computer picks the stats!")
         if coin_toss == 0:
-            print("You win the 50:50! You get to choose.")
+            print("You win the coin toss! You get to choose.")
         elif coin_toss == 1:
-            print("The computer wins the 50:50. It gets to choose.")
+            print("The computer wins the coin toss. It gets to choose.")
 
         # for loop to make the game last for Y rounds
         for Y in range(0, number_rounds):
@@ -251,7 +257,13 @@ def run():
                     reply_choice = catas[random_cata()]
 
             if reply_choice == 'quit':
-                exit()
+                sure = input('\nAre you sure you want to quit playing?\n')
+                if sure in affirmative:
+                    exit()
+                else:
+                    # the following does not add on an extra round, why?
+                    # number_rounds = number_rounds + 1
+                    continue
 
             elif reply_choice == 'magic points':
                 my_stat = my_character['magic points']
