@@ -2,6 +2,7 @@ import random
 import requests
 import sys
 
+
 # things I've added
 # replaced a bunch of if statements by using a dictionary
 # added a bunch of while loops - so if an unsuitable answer is given, it'll ask again
@@ -28,29 +29,12 @@ import sys
 # returning true is so the user isn't told it was an incorrect input
 # if not, return false and tell the user it was a bad input
 
-# i've added the check to 'ready to play?' and the stats request
-# but that's not finished
 
 def check(words):
     if words in actions:
         return True
     else:
         return False
-
-
-def then(in_put):
-    if in_put == 'rules':
-        rules()
-        # resume game at same point
-        print('\ninsert code here to return to the game at the same point')
-    elif in_put == 'quit':
-        sure = input('\nAre you sure you want to quit playing?\n')
-        if sure in affirmative:
-            exit()
-        else:
-            # work out how to resume the game at the same point
-            print('\n insert code here to return to the game to same point')
-
 
 #   handy lists
 affirmative = ['y',
@@ -180,7 +164,7 @@ def random_cata2():
 
 def rules():
     print("""
-    \nHello and welcome to our game of Harry Potter Top Trumps!\nThe game works as follows.
+The game works as follows.
 You and the computer will both be given a card with four categories.
 These categories are birth year, house, ancestry and magic points.
 You get to look at your card and decide which category looks like your best chance of winning the round.
@@ -191,11 +175,26 @@ And finally, for magic points, the card with the higher number defeats the other
 
 
 def run():
-    # sets the initial scores of the game to 0
     user_score = 0
     comp_score = 0
 
-    ready = input('\nAre you ready to play? y/n \n').lower()
+# insert while loop here for ready
+#     elif check(ready):
+#         if ready == 'quit':
+#             sure = input('\nAre you sure you want to quit playing?\n').lower()
+#             if sure in affirmative:
+#                 print('Goodbye then, hope you enjoyed playing!')
+#                 sys.exit()
+#             elif sure in negative:
+#                 replay = input('\nOkay then, are you ready to play?\n').lower()
+#                 break
+#             else:
+#                 continue
+#             elif ready == 'rules':
+#                 rules()
+#                 ready = input('\nWhich stat would you like to use?\n').lower()
+#                 break
+
     if ready in affirmative:
         number_reply = input('\nHow many rounds?\n').lower()
 
@@ -204,7 +203,8 @@ def run():
                 if number_reply == 'quit':
                     sure = input('\nAre you sure you want to quit playing?\n').lower()
                     if sure in affirmative:
-                        exit()
+                        print('Goodbye then, hope you enjoyed playing!')
+                        sys.exit()
                     elif sure in negative:
                         number_reply = input('\nOkay then, how many rounds would you like to play?\n').lower()
                         break
@@ -258,22 +258,7 @@ def run():
                                             my_character['ancestry'],
                                             my_character['magic points']))
 
-            if coin_toss == 0:
-                reply_choice = input("Which stat would you like to use? \n").lower()
-
-                while reply_choice not in valid_response:
-                    reply_choice = input(
-                        "\nSorry, I couldn't understand '" + reply_choice + "'. Please try again.\n"
-                                                                            "Which stat would you like to use?\n").lower()
-                    if reply_choice in valid_response:
-                        break
-                    else:
-                        reply_choice = input(
-                            "\nSorry, I couldn't understand'" + reply_choice + "'. Please try again.\n"
-                                                                               "Which stat would you like to use?\n").lower()
-                        continue
-
-            elif coin_toss == 1:
+            if coin_toss == 1:
                 if opponent_character['house'] == 'Gryffindor':
                     reply_choice = 'house'
                 elif opponent_character['house'] == 'Slytherin':
@@ -289,10 +274,35 @@ def run():
                 else:
                     reply_choice = catas[random_cata()]
 
-            if check(reply_choice):
-                then(reply_choice)
+            elif coin_toss == 0:
+                reply_choice = input("Which stat would you like to use? \n").lower()
 
-            elif reply_choice == 'magic points':
+                while reply_choice not in catas:
+                    if check(reply_choice):
+                        if reply_choice == 'quit':
+                            sure = input('\nAre you sure you want to quit playing?\n').lower()
+                            if sure in affirmative:
+                                print('Goodbye then, hope you enjoyed playing!')
+                                sys.exit()
+                            elif sure in negative:
+                                reply_choice = input('\nOkay then, which stat would you like to use?\n').lower()
+                                if reply_choice in catas:
+                                    break
+                                else:
+                                    continue #not sure if this is right
+                            else:
+                                continue
+                        elif reply_choice == 'rules':
+                            rules()
+                            reply_choice = input('\nWhich stat would you like to use?\n').lower()
+                            break
+
+                    else: reply_choice = input(
+                        "\nSorry, I couldn't understand '" + reply_choice + "'. Please try again.\n"
+                                                                            "Which stat would you like to use?\n").lower()
+                    continue
+
+            if reply_choice == 'magic points':
                 my_stat = my_character['magic points']
                 opponent_stat = opponent_character['magic points']
 
@@ -366,14 +376,25 @@ def run():
         replay = input("\nWould you like to play again?\n").lower()
 
         while replay not in affneg:
-            replay = input(
-                "\n1Sorry, I couldn't understand '" + replay + "'Would you like to play again?\n").lower()
-            if replay in affirmative or negative:
-                break
+            if check(replay):
+                if replay == 'quit':
+                    sure = input('\nAre you sure you want to quit playing?\n').lower()
+                    if sure in affirmative:
+                        print('\nGoodbye then, hope you enjoyed playing!')
+                        sys.exit()
+                    elif sure in negative:
+                        replay = input('\nOkay then, would you like to replay?\n').lower()
+                        break
+                    else:
+                        continue
+                elif replay == 'rules':
+                    rules()
+                    replay = input('\nWhich stat would you like to use?\n').lower()
+                    break
             else:
                 replay = input(
                     "\nSorry, I couldn't understand '" + replay + "'. Please try again.\n"
-                                                                  "Would you like to play again?\n").lower()
+                                                                        "Would you like to play again?\n").lower()
                 continue
 
         if replay in affirmative:
@@ -381,12 +402,12 @@ def run():
             run()
         elif replay in negative:
             print("\nGoodbye then, hope you enjoyed playing!")
-        else:
-            print("\nSorry, I didn't understand that.")
-            # add in loop to play again
 
-    elif check(ready):
-        then(ready)
+        else:
+            replay = input(
+                "\nSorry, I couldn't understand '" + replay + "'. Please try again.\n"
+                                                              "Would you like to play again?\n").lower()
+                # loop back
 
     elif ready in negative:
         sure = input("\nAre you sure?\n").lower()
@@ -407,16 +428,8 @@ def run():
         run()
 
 
-rules()
-run()
-        else:
-            print("\nI don't understand '" + ready + "', so I'll ask again!")
-            run()
-
-    else:
-        print("\nSorry, I didn't understand '" + ready + "'. Please try again.")
-        run()
-
-
+print('\nHello and welcome to our game of Harry Potter Top Trumps!\n')
+print('INSERT ART HERE')
+ready = input('\nAre you ready to play? y/n \n').lower()
 rules()
 run()
