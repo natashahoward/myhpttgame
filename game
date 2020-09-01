@@ -200,9 +200,22 @@ def run():
         number_reply = input('\nHow many rounds?\n').lower()
 
         while number_reply not in num_str_list:
-            number_reply = input(
-                "\nSorry, I didn't understand '" + number_reply + "'. Please try again.\nHow many rounds?\n").lower()
-            if number_reply in num_str_list:
+            if check(number_reply):
+                if number_reply == 'quit':
+                    sure = input('\nAre you sure you want to quit playing?\n').lower()
+                    if sure in affirmative:
+                        exit()
+                    elif sure in negative:
+                        number_reply = input('\nOkay then, how many rounds would you like to play?\n').lower()
+                        break
+                    else:
+                        continue
+                elif number_reply == 'rules':
+                    rules()
+                    number_reply = input('\nHow many rounds would you like to play?\n').lower()
+                    break
+
+            elif number_reply in num_str_list:
                 break
             else:
                 number_reply = input(
@@ -385,6 +398,17 @@ def run():
                 run()
         elif sure in negative:
             run()
+        else:
+            print("\nI don't understand '" + ready + "', so I'll ask again!")
+            run()
+
+    else:
+        print("\nSorry, I didn't understand '" + ready + "'. Please try again.")
+        run()
+
+
+rules()
+run()
         else:
             print("\nI don't understand '" + ready + "', so I'll ask again!")
             run()
