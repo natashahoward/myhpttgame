@@ -20,6 +20,7 @@ import sys
 # you win their card if they lose and it goes to the back of your deck
 # whoever has the most cards at the end of the rounds wins
 
+# adding 'quit' and 'rules'
 # for each loop, put the user input into a function
 # this function checks to see if it's a certain word
 # if it is, it'll do whatever needs to be done
@@ -27,8 +28,31 @@ import sys
 # returning true is so the user isn't told it was an incorrect input
 # if not, return false and tell the user it was a bad input
 
+# i've added the check to 'ready to play?' and the stats request
+# but that's not finished
 
-# handy lists
+def check(words):
+    if words in actions:
+        return True
+    else:
+        return False
+
+
+def then(in_put):
+    if in_put == 'rules':
+        rules()
+        # resume game at same point
+        print('\ninsert code here to return to the game at the same point')
+    elif in_put == 'quit':
+        sure = input('\nAre you sure you want to quit playing?\n')
+        if sure in affirmative:
+            exit()
+        else:
+            # work out how to resume the game at the same point
+            print('\n insert code here to return to the game to same point')
+
+
+#   handy lists
 affirmative = ['y',
                'ye',
                'yee',
@@ -176,10 +200,6 @@ def run():
         number_reply = input('\nHow many rounds?\n').lower()
 
         while number_reply not in num_str_list:
-            # if number_reply in valid_response:
-            #     print('Test successful')
-            # so the above does print 'Test successful and then it follows with "sorry i didn't understand"
-            # return to this loop later because it's less important
             number_reply = input(
                 "\nSorry, I didn't understand '" + number_reply + "'. Please try again.\nHow many rounds?\n").lower()
             if number_reply in num_str_list:
@@ -256,14 +276,8 @@ def run():
                 else:
                     reply_choice = catas[random_cata()]
 
-            if reply_choice == 'quit':
-                sure = input('\nAre you sure you want to quit playing?\n')
-                if sure in affirmative:
-                    exit()
-                else:
-                    # the following does not add on an extra round, why?
-                    # number_rounds = number_rounds + 1
-                    continue
+            if check(reply_choice):
+                then(reply_choice)
 
             elif reply_choice == 'magic points':
                 my_stat = my_character['magic points']
@@ -357,6 +371,9 @@ def run():
         else:
             print("\nSorry, I didn't understand that.")
             # add in loop to play again
+
+    elif check(ready):
+        then(ready)
 
     elif ready in negative:
         sure = input("\nAre you sure?\n").lower()
