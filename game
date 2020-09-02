@@ -29,25 +29,19 @@ import sys
 # returning true is so the user isn't told it was an incorrect input
 # if not, return false and tell the user it was a bad input
 
-# something to fix
-# which stat?
-# quit
-# are you sure you want to quit?
-# no
-# which stat would you like to use?
-# rules
-# PROGRAM BREAKS
-
 # another thing to fix
 # are you ready to play?
 # gibberish answer
 # prints over and over and over
+# THIS WON'T WORK UNTIL THERE's A WHILE LOOP FOR READY
+# o/w input for ready goes to else, which then goes to run, which feeds back to else
 
 def check(words):
     if words in actions:
         return True
     else:
         return False
+
 
 #   handy lists
 affirmative = ['y',
@@ -108,12 +102,11 @@ for x in range(0, 51):
 num_str_list = num_word_list + num_int_list
 
 # define regularly used strings here
-welcome ="\nHello and welcome to our game of Harry Potter Top Trumps!\n"
+welcome = "\nHello and welcome to our game of Harry Potter Top Trumps!\n"
 ruready = "\nAre you ready to play?\n"
 hmrounds = "\nHow many rounds would you like to play?\n"
-nocomprende = "Sorry, I didn't understand "
+nocomprende = "\nSorry, I didn't understand "
 pta = ". Please try again."
-# sorry I didn't understand, please try again
 whichstat = "\nWhich stat would you like to use?\n"
 suqi = "\nAre you sure you want to quit playing?\n"
 wupl = "\nWould you like to play again?\n"
@@ -236,13 +229,19 @@ def run():
                         sys.exit()
                     elif sure in negative:
                         number_reply = input(hmrounds).lower()
-                        break
+                        if number_reply in num_str_list:
+                            break
+                        else:
+                            continue
                     else:
                         continue
                 elif number_reply == 'rules':
                     rules()
                     number_reply = input(hmrounds).lower()
-                    break
+                    if number_reply in num_str_list:
+                        break
+                    else:
+                        continue
 
             elif number_reply in num_str_list:
                 break
@@ -306,29 +305,33 @@ def run():
             elif coin_toss == 0:
                 reply_choice = input(whichstat).lower()
 
-                while reply_choice not in catas:
-                    if check(reply_choice):
-                        if reply_choice == 'quit':
-                            sure = input(suqi).lower()
-                            if sure in affirmative:
-                                print(gdbi)
-                                sys.exit()
-                            elif sure in negative:
-                                reply_choice = input(whichstat).lower()
-                                if reply_choice in catas:
-                                    break
-                                else:
-                                    continue  # not sure if this is right
+            while reply_choice not in catas:
+                if check(reply_choice):
+                    if reply_choice == 'quit':
+                        sure = input(suqi).lower()
+                        if sure in affirmative:
+                            print(gdbi)
+                            sys.exit()
+                        elif sure in negative:
+                            reply_choice = input(whichstat).lower()
+                            if reply_choice in catas:
+                                break
                             else:
                                 continue
-                        elif reply_choice == 'rules':
-                            rules()
-                            reply_choice = input(whichstat).lower()
+                        else:
+                            continue
+                    elif reply_choice == 'rules':
+                        rules()
+                        reply_choice = input(whichstat).lower()
+                        if reply_choice in catas:
                             break
+                        else:
+                            continue
 
-                    else: reply_choice = input(
+                else:
+                    reply_choice = input(
                         nocomprende + "'" + reply_choice + "'" + pta + whichstat).lower()
-                    continue
+                continue
 
             if reply_choice == 'magic points':
                 my_stat = my_character['magic points']
@@ -412,17 +415,19 @@ def run():
                         sys.exit()
                     elif sure in negative:
                         replay = input(wupl).lower()
+                        if replay in affneg:
+                            break
+                        else:
+                            continue
+                elif replay == 'rules':
+                    rules()
+                    replay = input(wupl).lower()
+                    if replay in affneg:
                         break
                     else:
                         continue
-                elif replay == 'rules':
-                    rules()
-                    replay = input(whichstat).lower()
-                    break
             else:
-                replay = input(
-                    nocomprende + "'" + replay + "'" + pta + wupl).lower()
-                continue
+                replay = input(nocomprende + "'" + replay + "'" + pta + wupl).lower()
 
         if replay in affirmative:
             print("\nGlad you're enjoying the game! Let's go again!")
@@ -459,4 +464,3 @@ print('INSERT ART HERE')
 ready = input(ruready).lower()
 rules()
 run()
-
