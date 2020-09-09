@@ -46,4 +46,5 @@ Features I have introduced since finishing the course
   I've tested it more and it appears to work exactly as I'd like it to, however, I think there must be an easier, simpler way to do it because my code has multiple
   sequences that are very similar to each other. I want to add new features to the game that would require more user inputs, but I'd like to find a simplifying the
   code I've done so far first.
+- I think the next feature I'll work on is splitting the deck in two so user and computer have pre-assigned hands of cards at the start of the game.
   
