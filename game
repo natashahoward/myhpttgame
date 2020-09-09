@@ -10,31 +10,19 @@ import sys
 # added ability to replay
 # made the computer follow a couple of tactical rules
 # will always pick Gryffindor, will never pick Slytherin, will always pick birth year for 3 oldest characters
+# the player can select to quit or for the rules to come up at anytime
 
 
 # More things to add potentially!
 
 # high scores
-# perhaps add an option to go back, open the rules and resume the game
-# add option to quit at any time - and get it to ask if sure
 # split the deck in two sets at the beginning?
+# create an empty list then add to it?
+# number to keep track of how many cards in each persons hand
+# starter gets 11 cards, other gets 12
 # you win their card if they lose and it goes to the back of your deck
 # whoever has the most cards at the end of the rounds wins
 
-# adding 'quit' and 'rules'
-# for each loop, put the user input into a function
-# this function checks to see if it's a certain word
-# if it is, it'll do whatever needs to be done
-# then return true??
-# returning true is so the user isn't told it was an incorrect input
-# if not, return false and tell the user it was a bad input
-
-# another thing to fix
-# are you ready to play?
-# gibberish answer
-# prints over and over and over
-# THIS WON'T WORK UNTIL THERE's A WHILE LOOP FOR READY
-# o/w input for ready goes to else, which then goes to run, which feeds back to else
 
 def check(words):
     if words in actions:
@@ -105,8 +93,8 @@ num_str_list = num_word_list + num_int_list
 welcome = "\nHello and welcome to our game of Harry Potter Top Trumps!\n"
 ruready = "\nAre you ready to play?\n"
 hmrounds = "\nHow many rounds would you like to play?\n"
-nocomprende = "\nSorry, I didn't understand "
-pta = ". Please try again."
+nocomprende = "\nSorry, I didn't understand '"
+pta = "'. Please try again."
 whichstat = "\nWhich stat would you like to use?\n"
 suqi = "\nAre you sure you want to quit playing?\n"
 wupl = "\nWould you like to play again?\n"
@@ -115,6 +103,10 @@ gdbi = "\nGoodbye then, hope you enjoyed playing!"
 win = '\nYou win this round!'
 lose = '\nYou lose this round!'
 draw = "\nYou've drawn this round!"
+
+
+def art():
+    print('INSERT ART HERE')
 
 
 def generate_rand_int(min, max):
@@ -200,22 +192,51 @@ def run():
     user_score = 0
     comp_score = 0
 
-# insert while loop here for ready
-#     elif check(ready):
-#         if ready == 'quit':
-#             sure = input('\nAre you sure you want to quit playing?\n').lower()
-#             if sure in affirmative:
-#                 print('Goodbye then, hope you enjoyed playing!')
-#                 sys.exit()
-#             elif sure in negative:
-#                 replay = input('\nOkay then, are you ready to play?\n').lower()
-#                 break
-#             else:
-#                 continue
-#             elif ready == 'rules':
-#                 rules()
-#                 ready = input('\nWhich stat would you like to use?\n').lower()
-#                 break
+    ready = input(ruready).lower()
+
+    # refer to this one if other while loops don't work
+    while ready not in affneg:
+        if check(ready):
+            if ready == 'quit':
+                sure = input(suqi).lower()
+                if sure in affirmative:
+                    print(gdbi)
+                    sys.exit()
+                elif sure in negative:
+                    ready = input(ruready).lower()
+                    if ready in affneg:
+                        break
+                    elif check(ready):
+                        if ready == 'quit':
+                            continue
+                        elif ready == 'rules':
+                            rules()
+                            break
+                    else:
+                        print(nocomprende + sure + pta)
+                        continue
+                elif check(sure):
+                    if sure == 'quit':
+                        print(gdbi)
+                        sys.exit()
+                    elif sure == 'rules':
+                        rules()
+                else:
+                    print(nocomprende + sure + pta)
+                    continue
+            elif ready == 'rules':
+                rules()
+                ready = input(ruready).lower()
+                if ready in affneg:
+                    break
+                else:
+                    continue
+        elif ready in affneg:
+            break
+        else:
+            print(nocomprende + str(ready) + pta)
+            ready = input(ruready).lower()
+            continue
 
     if ready in affirmative:
         number_reply = input(hmrounds).lower()
@@ -231,9 +252,21 @@ def run():
                         number_reply = input(hmrounds).lower()
                         if number_reply in num_str_list:
                             break
-                        else:
-                            continue
+                        elif check(number_reply):
+                            if number_reply == 'quit':
+                                continue
+                            elif number_reply == 'rules':
+                                rules()
+                                break
+                    elif check(sure):
+                        if sure == 'quit':
+                            print(gdbi)
+                            sys.exit()
+                        elif sure == 'rules':
+                            rules()
                     else:
+                        # check this
+                        print(nocomprende + sure + pta)
                         continue
                 elif number_reply == 'rules':
                     rules()
@@ -242,12 +275,11 @@ def run():
                         break
                     else:
                         continue
-
             elif number_reply in num_str_list:
                 break
             else:
                 number_reply = input(
-                    nocomprende + "'" + number_reply + "'" + pta + hmrounds).lower()
+                    nocomprende + number_reply + pta + hmrounds).lower()
                 continue
 
         if number_reply in num_word_list:
@@ -271,7 +303,7 @@ def run():
             print("The computer wins the coin toss. It gets to choose.")
 
         # for loop to make the game last for Y rounds
-        for Y in range(0, number_rounds):
+        for Y in range(0, number_rounds):  # or until cards run out?
 
             my_character = random_character_adj()
             opponent_character = random_character_adj()
@@ -316,9 +348,20 @@ def run():
                             reply_choice = input(whichstat).lower()
                             if reply_choice in catas:
                                 break
-                            else:
-                                continue
+                            elif check(reply_choice):
+                                if reply_choice == 'quit':
+                                    continue
+                                elif reply_choice == 'rules':
+                                    rules()
+                                    break
+                        elif check(sure):
+                            if sure == 'quit':
+                                print(gdbi)
+                                sys.exit()
+                            elif sure == 'rules':
+                                rules()
                         else:
+                            print(nocomprende + sure + pta)
                             continue
                     elif reply_choice == 'rules':
                         rules()
@@ -327,31 +370,28 @@ def run():
                             break
                         else:
                             continue
-
+                elif reply_choice in catas:
+                    break
                 else:
-                    reply_choice = input(
-                        nocomprende + "'" + reply_choice + "'" + pta + whichstat).lower()
+                    print(nocomprende + reply_choice + pta)
+                    reply_choice = input(whichstat).lower()
                 continue
 
             if reply_choice == 'magic points':
                 my_stat = my_character['magic points']
                 opponent_stat = opponent_character['magic points']
-
                 if my_stat > opponent_stat:
                     print(win)
                     user_score = user_score + 1
-
                 elif my_stat < opponent_stat:
                     print(lose)
                     comp_score = comp_score + 1
-
                 else:
                     print(draw)
 
             elif reply_choice == 'birth year' or 'house':
                 my_stat = my_character[reply_choice]
                 opponent_stat = opponent_character[reply_choice]
-
                 if my_stat < opponent_stat:
                     print(win)
                     user_score = user_score + 1
@@ -364,30 +404,23 @@ def run():
             elif reply_choice == 'ancestry':
                 my_stat = my_character['ancestry']
                 opponent_stat = opponent_character['ancestry']
-
                 if my_stat == opponent_stat:
                     print(draw)
-
                 elif my_stat == 'half-blood' and opponent_stat == 'muggleborn':
                     print(win)
                     user_score = user_score + 1
-
                 elif my_stat == 'half-blood' and opponent_stat == 'pure-blood':
                     print(lose)
                     comp_score = comp_score + 1
-
                 elif my_stat == 'muggleborn' and opponent_stat == 'pure-blood':
                     print(win)
                     user_score = user_score + 1
-
                 elif my_stat == 'muggleborn' and opponent_stat == 'half-blood':
                     print(lose)
                     comp_score = comp_score + 1
-
                 elif my_stat == 'pure-blood' and opponent_stat == 'half-blood':
                     print(win)
                     user_score = user_score + 1
-
                 elif my_stat == 'pure-blood' and opponent_stat == 'muggle-born':
                     print(lose)
                     comp_score = comp_score + 1
@@ -417,8 +450,21 @@ def run():
                         replay = input(wupl).lower()
                         if replay in affneg:
                             break
-                        else:
-                            continue
+                        elif check(replay):
+                            if replay == 'quit':
+                                continue
+                            elif replay == 'rules':
+                                rules()
+                                break
+                    elif check(sure):
+                        if sure == 'quit':
+                            print(gdbi)
+                            sys.exit()
+                        elif sure == 'rules':
+                            rules()
+                            break
+                    else:
+                        continue
                 elif replay == 'rules':
                     rules()
                     replay = input(wupl).lower()
@@ -426,20 +472,51 @@ def run():
                         break
                     else:
                         continue
+            elif replay in affneg:
+                break
             else:
-                replay = input(nocomprende + "'" + replay + "'" + pta + wupl).lower()
+                replay = input(nocomprende + replay + pta + wupl).lower()
+                continue
 
         if replay in affirmative:
             print("\nGlad you're enjoying the game! Let's go again!")
             run()
         elif replay in negative:
             print(gdbi)
-
+        elif check(replay):
+            while check(replay):
+                if replay == 'quit':
+                    sure = input(suqi).lower()
+                    if sure in affirmative:
+                        print(gdbi)
+                    elif sure in negative:
+                        replay = input(suqi).lower()
+                        if replay in affneg:
+                            break
+                        elif check(replay):
+                            if replay == 'quit':
+                                continue
+                            elif replay == 'rules':
+                                rules()
+                                break
+                    elif sure == 'quit':
+                        print(gdbi)
+                        sys.exit()
+                    elif sure == 'rules':
+                        rules()
+                        break
+                    else:
+                        print(nocomprende + sure + pta)
+                elif replay == 'rules':
+                    rules()
+                    break
+                else:
+                    print(nocomprende + replay + pta)
+                    replay = input(wupl).lower()
         else:
             replay = input(
-                nocomprende + "'" + replay + "'" + pta + wupl).lower()
-                # loop back
-
+                nocomprende + replay + pta + wupl).lower()
+    
     elif ready in negative:
         sure = input("\nAre you sure?\n").lower()
         if sure in affirmative:
@@ -451,16 +528,14 @@ def run():
         elif sure in negative:
             run()
         else:
-            print(nocomprende + "'" + ready + "'" + pta)
+            print(nocomprende + ready + pta)
             run()
-
     else:
-        print(nocomprende + "'" + ready + "'" + pta)
+        print(nocomprende + ready + pta)
         run()
 
 
+art()
 print(welcome)
-print('INSERT ART HERE')
-ready = input(ruready).lower()
 rules()
 run()
