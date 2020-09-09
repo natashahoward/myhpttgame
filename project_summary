@@ -22,8 +22,6 @@ When all the rounds have happened, the game calculates the final score, then ask
 
 Features I could try to introduce
 - perhaps an option to pick difficulty levels? (for when the computer chooses catagories, difficulty is the tactics it uses)
-- an option to open the rules and then resume the game
-- add option to quit at anytime, and to also ask if they're definitely sure they would like to quit
 - cards are dealt into two hands at the start and aren't duplicated
 - if a round is drawn, the two players look at their next card and the one who does better on the second card wins
 - the winning player of each round gets to pick the next catagory
@@ -42,3 +40,10 @@ Features I have introduced since finishing the course
 - Most recently, I corrected an error where for some reason, the game would say you lost the round when you had more the magic points than the computer.
   After searching through the code for any obvious errors and not finding any, the error corrected itself when I simply moved the position of this section
   of code. I don't know why this problem arose nor that why what I did would have corrected the problem so I'd like to explore this a bit more!
+- 9/9/20 : Any input that the user puts in, if it is invalid it will ask again. The user can input 'rules' to get the rules and return to the game at the same
+  point, the user can also input 'quit' to quit (the game will ask them if they're sure beforehand). Any invalid input to any question and it will be asked again.
+  It says in previous uploads that I'd added this, which I had, except upon testing, there were sometimes errors or it didn't work exactly the way I wanted it to.
+  I've tested it more and it appears to work exactly as I'd like it to, however, I think there must be an easier, simpler way to do it because my code has multiple
+  sequences that are very similar to each other. I want to add new features to the game that would require more user inputs, but I'd like to find a simplifying the
+  code I've done so far first.
+  
