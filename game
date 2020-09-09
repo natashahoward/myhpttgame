@@ -188,13 +188,27 @@ i.e. muggleborn defeats pure-blood defeats half-blood defeats muggleborn etc.
 And finally, for magic points, the card with the higher number defeats the other.\nAnd that's it!""")
 
 
+def ancestrywin():
+    if my_stat == 'half-blood' and opponent_stat == 'muggleborn':
+        return True
+    elif my_stat == 'muggleborn' and opponent_stat == 'pure-blood':
+        return True
+    elif my_stat == 'pure-blood' and opponent_stat == 'half-blood':
+        return True
+    elif my_stat == 'half-blood' and opponent_stat == 'pure-blood':
+        return False
+    elif my_stat == 'muggleborn' and opponent_stat == 'half-blood':
+        return False
+    elif my_stat == 'pure-blood' and opponent_stat == 'muggle-born':
+        return False
+
+
 def run():
     user_score = 0
     comp_score = 0
 
     ready = input(ruready).lower()
 
-    # refer to this one if other while loops don't work
     while ready not in affneg:
         if check(ready):
             if ready == 'quit':
@@ -406,22 +420,10 @@ def run():
                 opponent_stat = opponent_character['ancestry']
                 if my_stat == opponent_stat:
                     print(draw)
-                elif my_stat == 'half-blood' and opponent_stat == 'muggleborn':
+                elif ancestrywin():
                     print(win)
                     user_score = user_score + 1
-                elif my_stat == 'half-blood' and opponent_stat == 'pure-blood':
-                    print(lose)
-                    comp_score = comp_score + 1
-                elif my_stat == 'muggleborn' and opponent_stat == 'pure-blood':
-                    print(win)
-                    user_score = user_score + 1
-                elif my_stat == 'muggleborn' and opponent_stat == 'half-blood':
-                    print(lose)
-                    comp_score = comp_score + 1
-                elif my_stat == 'pure-blood' and opponent_stat == 'half-blood':
-                    print(win)
-                    user_score = user_score + 1
-                elif my_stat == 'pure-blood' and opponent_stat == 'muggle-born':
+                elif not ancestrywin():
                     print(lose)
                     comp_score = comp_score + 1
 
@@ -516,7 +518,7 @@ def run():
         else:
             replay = input(
                 nocomprende + replay + pta + wupl).lower()
-    
+
     elif ready in negative:
         sure = input("\nAre you sure?\n").lower()
         if sure in affirmative:
@@ -530,6 +532,7 @@ def run():
         else:
             print(nocomprende + ready + pta)
             run()
+
     else:
         print(nocomprende + ready + pta)
         run()
