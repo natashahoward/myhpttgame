@@ -125,18 +125,11 @@ def random_character_adj():
     my_int = generate_rand_int(min=0, max=22)
     characters = get_characters()
 
-    random_character_name = characters[my_int]['name']
-    random_character_house = characters[my_int]['house']
-    random_character_ancestry = characters[my_int]['ancestry']
-    random_character_birth_year = characters[my_int]['yearOfBirth']
-    random_character_mp = len(characters[my_int]['actor'])
-
-    # defining these generally first, then empty entries can be corrected
-    character_name = random_character_name
-    character_house = random_character_house
-    character_ancestry = random_character_ancestry
-    character_birth_year = random_character_birth_year
-    character_mp = random_character_mp
+    character_name = characters[my_int]['name']
+    character_house = characters[my_int]['house']
+    character_ancestry = characters[my_int]['ancestry']
+    character_birth_year = characters[my_int]['yearOfBirth']
+    character_mp = len(characters[my_int]['actor'])
 
     if my_int == 4 or my_int == 6 or my_int == 10:
         character_ancestry = 'half-blood'
