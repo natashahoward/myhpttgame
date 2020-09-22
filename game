@@ -2,9 +2,6 @@ import random
 import requests
 import sys
 
-# More things to add potentially!
-
-# high scores
 # split the deck in two sets at the beginning?
 # create an empty list then add to it?
 # number to keep track of how many cards in each persons hand
@@ -66,7 +63,6 @@ num_dic = {
 num_int_list = []
 for x in range(0, 51):
     num_int_list.append(str(x))
-
 num_str_list = num_word_list + num_int_list
 valid_response = affneg + num_str_list + catas
 check = ['quit', 'rules']
@@ -84,7 +80,6 @@ win = '\nYou win this round!'
 lose = '\nYou lose this round!'
 draw = "\nYou've drawn this round!"
 comparison = 'The opponent selected {}, and their {} was {}.\n'
-
 comp_deck = range(0,22)
 
 
@@ -114,13 +109,6 @@ def random_character_adj():
     character_ancestry = characters[my_int]['ancestry']
     character_birth_year = characters[my_int]['yearOfBirth']
     character_mp = len(characters[my_int]['actor'])
-
-    # # defining these generally first, then empty entries can be corrected
-    # character_name = random_character_name
-    # character_house = random_character_house
-    # character_ancestry = random_character_ancestry
-    # character_birth_year = random_character_birth_year
-    # character_mp = random_character_mp
 
     if my_int == 4 or my_int == 6 or my_int == 10:
         character_ancestry = 'half-blood'
